@@ -1,9 +1,10 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import { call } from 'redux-saga/effects';
 
-const API_URL = process.env.REST_URL;
+// TODO: SETUP THIS URL
+const API_URL = process.env.REST_URL ?? 'http://worldclockapi.com/api/';
 
-type ApiResponse<T = never> = {
+export type ApiResponse<T = never> = {
   ok: boolean;
   data?: T;
   message?: string;
@@ -15,7 +16,7 @@ function* FetchService<ResponseData, RequestData = unknown>(
   auth?: string,
   data: RequestData = {} as RequestData,
   queryParams?: { [key: string]: string }
-): Generator<unknown, ApiResponse<ResponseData>> {
+): Generator<unknown, ApiResponse<ResponseData>, never> {
   try {
     const requestConfig: AxiosRequestConfig<typeof data> = {
       method: method,

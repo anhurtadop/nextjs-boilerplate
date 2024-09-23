@@ -1,5 +1,5 @@
 import useAwaitableSagaAction from '@/hooks/useAwaitableSagaAction';
-import { increment, startTimer } from '@/store/counter/action';
+import { getCurrentTime, increment, startTimer } from '@/store/counter/action';
 import { selectCounterCount } from '@/store/selectors';
 import { ExtractCallbackType, promisifiedCallback } from '@/utils/common';
 import { useCallback, useState } from 'react';
@@ -31,6 +31,15 @@ export function Counter() {
     }
   }, []);
 
+  const { dispatchAction: getCurrentTimeAction, busy: getTimeBusy } = useAwaitableSagaAction(getCurrentTime);
+  const [currentTime, setCurrentTime] = useState('');
+  const getTimeHandler = useCallback(async () => {
+    const response = await getCurrentTimeAction();
+    if (response.ok) {
+      setCurrentTime(JSON.stringify(response.data ?? ''));
+    }
+  }, []);
+
   return (
     <div>
       <div>
@@ -46,10 +55,16 @@ export function Counter() {
         <span>Manually Promisified Timer {timerBusy ? 'Running' : 'Stopped'}</span>
       </div>
       <div>
-        <button onClick={timerHandlerHook} disabled={timerBusy}>
+        <button onClick={timerHandlerHook} disabled={timerHookBusy}>
           Start Timer
         </button>
         <span>Hook Promisified Timer {timerHookBusy ? 'Running' : 'Stopped'}</span>
+      </div>
+      <div>
+        <button onClick={getTimeHandler} disabled={getTimeBusy}>
+          Get Current Time
+        </button>
+        <span>{currentTime}</span>
       </div>
     </div>
   );
