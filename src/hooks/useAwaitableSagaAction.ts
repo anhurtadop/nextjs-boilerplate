@@ -16,7 +16,11 @@ function useAwaitableSagaAction<ActionType extends string, DispatchData extends 
   const dispatch = useDispatch();
   const [busy, setBusy] = useState(false);
   const dispatchAction = useCallback(
-    async (data: Omit<Parameters<typeof action>[0], 'callback'>) => {
+    async (
+      data: keyof Omit<Parameters<typeof action>[0], 'callback'> extends never
+        ? void
+        : Omit<Parameters<typeof action>[0], 'callback'>
+    ) => {
       const { callback, promise } = promisifiedCallback<ReturnData>();
       setBusy(true);
       // @ts-ignore -- There's an issue with DispatchData typing here, but its fine for now.
