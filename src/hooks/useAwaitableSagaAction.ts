@@ -9,7 +9,10 @@ type ActionWithCallback<ActionType extends string, DispatchData extends { [key: 
   payload: typeof payload;
 };
 
-/** Gives a way to await a saga action and get the returned value with a simple await */
+/**
+ * Gives a way to await a saga action and get the returned value with a simple await,
+ * useful when the data doesn't need to be put in the redux store (though it can be), and just want local access
+ * */
 function useAwaitableSagaAction<ActionType extends string, DispatchData extends { [key: string]: unknown }, ReturnData>(
   action: ActionWithCallback<ActionType, DispatchData, ReturnData>
 ) {
