@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { incrementAsync } from './action';
 
 const initialState = {
-   count: 0,
+  count: 0,
 };
 
 const counter = createSlice({
@@ -10,12 +10,13 @@ const counter = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(incrementAsync, (state, {payload}) => {
+    builder.addCase(incrementAsync, (state, { payload }) => {
       return {
         ...state,
-        count: payload
-      }
-    })
-}})
+        count: payload,
+      };
+    });
+  },
+});
 
 export default counter.reducer;

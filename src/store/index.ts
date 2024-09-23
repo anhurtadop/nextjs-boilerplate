@@ -48,7 +48,7 @@ import reducers from './reducers';
 import sagas from './sagas';
 // import reconcile from './reconcile';
 import { configureStore } from '@reduxjs/toolkit';
-import { persistStore, persistReducer, getStoredState, REHYDRATE } from 'redux-persist';
+import { persistStore, persistReducer } from 'redux-persist';
 
 const createNoopStorage = () => {
   return {
@@ -67,7 +67,7 @@ const reducer = (state: any, action: any): ReturnType<typeof reducers> => {
   // let reconcileState = {};
 
   // if (action.type == '__NEXT_REDUX_WRAPPER_HYDRATE__') reconcileState = reconcile(state, action.payload);
-  if (action.type === HYDRATE) return { ...state, ...action.payload/*, ...reconcileState*/ };
+  if (action.type === HYDRATE) return { ...state, ...action.payload /*, ...reconcileState*/ };
 
   return reducers(state, action);
 };
@@ -107,11 +107,10 @@ const makeStore = ({ isServer }: any) => {
       devTools: process.env.NODE_ENV !== 'production',
     });
 
-    // @ts-ignore -- special stuff
+    // @ts-ignore -- adding an extra field for persistor
     store.__persistor = persistStore(store);
-    // @ts-ignore -- special stuff
+    // @ts-ignore -- adding an extra field for saga
     store['sagaTask'] = sagaMiddleware.run(sagas);
-
 
     return store;
   }
@@ -123,4 +122,3 @@ type StoreGetState = ConfigureStore['getState'];
 export type RootState = ReturnType<StoreGetState>;
 
 export default wrapper;
-

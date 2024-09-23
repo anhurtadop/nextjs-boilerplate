@@ -10,6 +10,6 @@ const App: FC<AppProps> = ({ Component, ...rest }) => {
       <Component {...props} />
     </Provider>
   );
-}
+};
 
 export default App;

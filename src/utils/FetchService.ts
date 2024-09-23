@@ -14,7 +14,7 @@ function* FetchService<ResponseData, RequestData = unknown>(
   method: Method = 'GET',
   auth?: string,
   data: RequestData = {} as RequestData,
-  queryParams?: {[key: string]: string}
+  queryParams?: { [key: string]: string }
 ): Generator<unknown, ApiResponse<ResponseData>> {
   try {
     const requestConfig: AxiosRequestConfig<typeof data> = {
@@ -25,17 +25,13 @@ function* FetchService<ResponseData, RequestData = unknown>(
         'Content-Type': 'application/json',
         ...(auth
           ? {
-            Authorization: `Bearer ${auth}`,
-          }
+              Authorization: `Bearer ${auth}`,
+            }
           : {}),
       },
     };
 
-    const response = (yield call(
-      axios,
-      `${API_URL}/${url}`,
-      requestConfig
-    )) as AxiosResponse<ResponseData>;
+    const response = (yield call(axios, `${API_URL}/${url}`, requestConfig)) as AxiosResponse<ResponseData>;
     return {
       ok: true,
       data: response.data,

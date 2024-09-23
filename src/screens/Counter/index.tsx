@@ -5,22 +5,20 @@ import { selectCounterCount } from '@/store/selectors';
 import { ExtractCallbackType, promisifiedCallback } from '@/utils/common';
 
 export function Counter() {
-    const count = useSelector(selectCounterCount);
-    const dispatch = useDispatch();
+  const count = useSelector(selectCounterCount);
+  const dispatch = useDispatch();
 
-    const [timerBusy, setTimerBusy] = useState(false)
-    const timerHandler = useCallback(async () => {
-      const { callback, promise } = promisifiedCallback<ExtractCallbackType<typeof startTimer>>()
-      setTimerBusy(true);
-      const actionPackage = startTimer({delayMs: 3000, callback});
-      console.log('ACTION PACKAGE', actionPackage)
-      dispatch(actionPackage)
-      const response = await promise;
-      setTimerBusy(false);
-      if (response.ok) {
-        console.log(response, response.data)
-      }
-    }, [])
+  const [timerBusy, setTimerBusy] = useState(false);
+  const timerHandler = useCallback(async () => {
+    const { callback, promise } = promisifiedCallback<ExtractCallbackType<typeof startTimer>>();
+    setTimerBusy(true);
+    dispatch(startTimer({ delayMs: 3000, callback }));
+    const response = await promise;
+    setTimerBusy(false);
+    if (response.ok) {
+      console.log(response, response.data);
+    }
+  }, []);
 
   return (
     <div>
@@ -31,8 +29,10 @@ export function Counter() {
         {/* <button onClick={() => dispatch(incrementAsync())}>Increment Async</button> */}
       </div>
       <div>
-        <button onClick={timerHandler}>Start Timer</button>
-        <span>Timer { timerBusy ? 'Running' : 'Stopped' }</span>
+        <button onClick={timerHandler} disabled={timerBusy}>
+          Start Timer
+        </button>
+        <span>Timer {timerBusy ? 'Running' : 'Stopped'}</span>
       </div>
     </div>
   );
