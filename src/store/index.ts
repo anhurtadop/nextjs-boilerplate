@@ -42,13 +42,13 @@
 // export { wrapper };
 
 import { HYDRATE, createWrapper } from 'next-redux-wrapper';
-import createSagaMiddleware from 'redux-saga';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
+import createSagaMiddleware from 'redux-saga';
 import reducers from './reducers';
 import sagas from './sagas';
 // import reconcile from './reconcile';
 import { configureStore } from '@reduxjs/toolkit';
-import { persistStore, persistReducer } from 'redux-persist';
+import { persistReducer, persistStore } from 'redux-persist';
 
 const createNoopStorage = () => {
   return {
