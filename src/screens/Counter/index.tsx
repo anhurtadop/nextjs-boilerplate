@@ -2,7 +2,7 @@ import useAwaitableSagaAction from '@/hooks/useAwaitableSagaAction';
 import { getCurrentTime, increment, startTimer } from '@/store/counter/action';
 import { selectCounterCount } from '@/store/selectors';
 import { ExtractCallbackType, promisifiedCallback } from '@/utils/common';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 export function Counter() {
@@ -11,7 +11,7 @@ export function Counter() {
 
   /** Manually promisifying a saga action call and awaiting its response */
   const [timerBusy, setTimerBusy] = useState(false);
-  const timerHandler = useCallback(async () => {
+  const timerHandler = async () => {
     const { callback, promise } = promisifiedCallback<ExtractCallbackType<typeof startTimer>>();
     setTimerBusy(true);
     dispatch(startTimer({ delayMs: 3000, callback }));
@@ -20,25 +20,17 @@ export function Counter() {
     if (response.ok) {
       console.log('Manual handling response', response, response.data);
     }
-  }, []);
+  };
 
   /** Using useAwaitableSagaAction hook to await a saga action */
-  const { dispatchAction: startTimerAction, busy: timerHookBusy } = useAwaitableSagaAction(startTimer);
-  const timerHandlerHook = useCallback(async () => {
-    const response = await startTimerAction({ delayMs: 3000 });
-    if (response.ok) {
-      console.log('Hook response', response, response.data);
-    }
-  }, []);
-
-  const { dispatchAction: getCurrentTimeAction, busy: getTimeBusy } = useAwaitableSagaAction(getCurrentTime);
+  const { dispatchAction: dispatchGetCurrentTime, busy: getTimeBusy } = useAwaitableSagaAction(getCurrentTime);
   const [currentTime, setCurrentTime] = useState('');
-  const getTimeHandler = useCallback(async () => {
-    const response = await getCurrentTimeAction();
+  const getTimeHandler = async () => {
+    const response = await dispatchGetCurrentTime();
     if (response.ok) {
       setCurrentTime(JSON.stringify(response.data ?? ''));
     }
-  }, []);
+  };
 
   return (
     <div>
@@ -53,12 +45,6 @@ export function Counter() {
           Start Timer
         </button>
         <span>Manually Promisified Timer {timerBusy ? 'Running' : 'Stopped'}</span>
-      </div>
-      <div>
-        <button onClick={timerHandlerHook} disabled={timerHookBusy}>
-          Start Timer
-        </button>
-        <span>Hook Promisified Timer {timerHookBusy ? 'Running' : 'Stopped'}</span>
       </div>
       <div>
         <button onClick={getTimeHandler} disabled={getTimeBusy}>

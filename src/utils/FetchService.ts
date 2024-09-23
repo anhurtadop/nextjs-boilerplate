@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from 'ax
 import { call } from 'redux-saga/effects';
 
 // TODO: SETUP THIS URL
-const API_URL = process.env.REST_URL ?? 'http://worldclockapi.com/api/';
+const API_URL = process.env.REST_URL ?? 'http://worldclockapi.com/api';
 
 export type ApiResponse<T = never> = {
   ok: boolean;
