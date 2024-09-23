@@ -1,34 +1,33 @@
-import { promisifiedCallback, SagaCallback } from '@/utils';
-import { createAction } from '@reduxjs/toolkit';
-import { useCallback, useMemo } from 'react';
+import { promisifiedCallback, SagaCallback } from '@/utils/common';
+import { useCallback, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-export type SagaCallback<DataType = void, CallbackReturnType = unknown> = (args: {
-  ok: boolean;
-  message?: string;
-  data?: DataType;
-}) => CallbackReturnType;
-
 type ActionWithCallback<ActionType extends string, DispatchData extends { [key: string]: unknown }, ReturnData> = (
-  data: DispatchData,
-  callback: SagaCallback<ReturnData>
-) => ReturnType<typeof createAction<DispatchData & { callback: SagaCallback<ReturnData> }, ActionType>>;
+  payload: DispatchData & { callback: SagaCallback<ReturnData> }
+) => {
+  type: ActionType;
+  payload: typeof payload;
+};
 
 /** Gives a way to await a saga action and get the returned value with a simple await */
-function useAwaitableSagaAction<ActionType extends string, DispatchData, ReturnData>(
+function useAwaitableSagaAction<ActionType extends string, DispatchData extends { [key: string]: unknown }, ReturnData>(
   action: ActionWithCallback<ActionType, DispatchData, ReturnData>
 ) {
   const dispatch = useDispatch();
+  const [busy, setBusy] = useState(false);
   const dispatchAction = useCallback(
-    async (data: Parameters<typeof action>[0]) => {
+    async (data: Omit<Parameters<typeof action>[0], 'callback'>) => {
       const { callback, promise } = promisifiedCallback<ReturnData>();
-      dispatch(action(data, callback));
+      setBusy(true);
+      // @ts-ignore -- There's an issue with DispatchData typing here, but its fine for now.
+      dispatch(action({ ...data, callback }));
       const response = await promise;
+      setBusy(false);
       return response;
     },
     [dispatch, action]
   );
-  return useMemo(() => ({ dispatchAction }), [dispatchAction]);
+  return { dispatchAction, busy };
 }
 
 export default useAwaitableSagaAction;

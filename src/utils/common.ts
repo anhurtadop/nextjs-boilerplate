@@ -1,8 +1,8 @@
-export type SagaCallback<DataType = void, ReturnType = unknown> = (args: {
+export type SagaCallback<DataType = void, CallbackReturnType = void> = (args: {
   ok: boolean;
   message?: string;
   data?: DataType;
-}) => ReturnType;
+}) => CallbackReturnType;
 export type ExtractCallbackType<T extends (...args: any) => any> =
   ReturnType<T> extends { payload: { callback?: SagaCallback<infer R> } } ? R : unknown;
 
