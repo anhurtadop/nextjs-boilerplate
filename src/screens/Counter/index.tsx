@@ -1,13 +1,15 @@
-import { useCallback, useState } from 'react';
+import useAwaitableSagaAction from '@/hooks/useAwaitableSagaAction';
 import { increment, startTimer } from '@/store/counter/action';
-import { useDispatch, useSelector } from 'react-redux';
 import { selectCounterCount } from '@/store/selectors';
 import { ExtractCallbackType, promisifiedCallback } from '@/utils/common';
+import { useCallback, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 export function Counter() {
   const count = useSelector(selectCounterCount);
   const dispatch = useDispatch();
 
+  /** Manually promisifying a saga action call and awaiting its response */
   const [timerBusy, setTimerBusy] = useState(false);
   const timerHandler = useCallback(async () => {
     const { callback, promise } = promisifiedCallback<ExtractCallbackType<typeof startTimer>>();
@@ -16,7 +18,16 @@ export function Counter() {
     const response = await promise;
     setTimerBusy(false);
     if (response.ok) {
-      console.log(response, response.data);
+      console.log('Manual handling response', response, response.data);
+    }
+  }, []);
+
+  /** Using useAwaitableSagaAction hook to await a saga action */
+  const { dispatchAction: startTimerAction, busy: timerHookBusy } = useAwaitableSagaAction(startTimer);
+  const timerHandlerHook = useCallback(async () => {
+    const response = await startTimerAction({ delayMs: 3000 });
+    if (response.ok) {
+      console.log('Hook response', response, response.data);
     }
   }, []);
 
@@ -32,7 +43,13 @@ export function Counter() {
         <button onClick={timerHandler} disabled={timerBusy}>
           Start Timer
         </button>
-        <span>Timer {timerBusy ? 'Running' : 'Stopped'}</span>
+        <span>Manually Promisified Timer {timerBusy ? 'Running' : 'Stopped'}</span>
+      </div>
+      <div>
+        <button onClick={timerHandlerHook} disabled={timerBusy}>
+          Start Timer
+        </button>
+        <span>Hook Promisified Timer {timerHookBusy ? 'Running' : 'Stopped'}</span>
       </div>
     </div>
   );
