@@ -1,54 +1,10 @@
-// import { configureStore } from '@reduxjs/toolkit';
-// import createSagaMiddleware from 'redux-saga';
-// import { persistStore, persistReducer } from 'redux-persist';
-// import storage from 'redux-persist/lib/storage'; // Usamos el almacenamiento local por defecto
-// import { createWrapper } from 'next-redux-wrapper';
-// import reducers from './reducers'; // Aquí defines tus reducers combinados
-// import sagas from './sagas'; // Aquí defines tus sagas
-
-// // Configuración del Persist
-// const persistConfig = {
-//   key: 'root',
-//   storage, // Utiliza localStorage para la persistencia
-//   whitelist: ['counter'], // Reducers que quieres persistir
-//   blacklist: [''], // Reducers que no quieres persistir
-// };
-
-// const persistedReducer = persistReducer(persistConfig, reducers);
-
-// // Crear middleware de Saga
-// const sagaMiddleware = createSagaMiddleware();
-
-// const makeStore = () => {
-//   const store = configureStore({
-//     reducer: persistedReducer,
-//     middleware: (getDefaultMiddleware) =>
-//       getDefaultMiddleware({
-//         thunk: false, // Desactivamos Thunks si usamos Sagas
-//         serializableCheck: false, // Evita problemas con objetos no serializables
-//       }).concat(sagaMiddleware),
-//     devTools: process.env.NODE_ENV !== 'production', // Activar Redux DevTools en desarrollo
-//   });
-
-//   store.__persistor = persistStore(store);
-//     store['sagaTask'] = sagaMiddleware.run(sagas);
-
-//   return store;
-// };
-
-// // Configuramos el wrapper de Next.js
-// const wrapper = createWrapper(makeStore, { debug: false });
-
-// export { wrapper };
-
+import { configureStore } from '@reduxjs/toolkit';
 import { HYDRATE, createWrapper } from 'next-redux-wrapper';
+import { persistReducer, persistStore } from 'redux-persist';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import createSagaMiddleware from 'redux-saga';
 import reducers from './reducers';
 import sagas from './sagas';
-// import reconcile from './reconcile';
-import { configureStore } from '@reduxjs/toolkit';
-import { persistReducer, persistStore } from 'redux-persist';
 
 const createNoopStorage = () => {
   return {

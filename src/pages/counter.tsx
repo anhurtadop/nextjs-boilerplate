@@ -1,7 +1,8 @@
+import { Counter } from '@/screens/Counter';
+import type { GetServerSideProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
 import { FC } from 'react';
-
-import { Counter } from '@/screens/Counter';
 
 const CounterPage: FC = () => {
   return (
@@ -14,12 +15,10 @@ const CounterPage: FC = () => {
   );
 };
 
+export const getServerSideProps: GetServerSideProps<any> = async () => ({
+  props: {
+    ...(await serverSideTranslations('en', ['common'])),
+  },
+});
+
 export default CounterPage;
-
-export async function getServerSideProps({ req, res }: any) {
-  res.setHeader('Cache-Control', 'public, s-maxage=10, stale-while-revalidate=59');
-
-  return {
-    props: {},
-  };
-}

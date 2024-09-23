@@ -2,13 +2,14 @@ import useAwaitableSagaAction from '@/hooks/useAwaitableSagaAction';
 import { getCurrentTime, increment, startTimer } from '@/store/counter/action';
 import { selectCounterCount } from '@/store/selectors';
 import { ExtractCallbackType, promisifiedCallback } from '@/utils/common';
+import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 export function Counter() {
   const count = useSelector(selectCounterCount);
   const dispatch = useDispatch();
-
+  const { t } = useTranslation();
   /** Manually promisifying a saga action call and awaiting its response */
   const [timerBusy, setTimerBusy] = useState(false);
   const timerHandler = async () => {
@@ -39,6 +40,7 @@ export function Counter() {
         <span>{count}</span>
         <button onClick={() => dispatch(increment(count))}>+</button>
         {/* <button onClick={() => dispatch(incrementAsync())}>Increment Async</button> */}
+        {t('welcome')}
       </div>
       <div>
         <button onClick={timerHandler} disabled={timerBusy}>
