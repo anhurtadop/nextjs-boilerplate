@@ -1,7 +1,27 @@
 {
   "name": "nextjs-boilerplate",
-  "version": "0.1.0",
+  "version": "0.0.1",
+  "description": "Boilerplate for a App with NextJS 14",
   "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.x",
+    "npm": ">=10.x"
+  },
+  "contributors": [
+    {
+      "name": "Anthony Hurtado",
+      "url": "https://github.com/anhurtadop"
+    },
+    {
+      "name": "Gerardo Kohatus",
+      "url": "https://github.com/ger06"
+    },
+    {
+      "name": "Ricardo Rico",
+      "url": "https://github.com/PachotheElf"
+    }
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
