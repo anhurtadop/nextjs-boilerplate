@@ -1,13 +1,13 @@
-import useAwaitableSagaAction from '@/hooks/useAwaitableSagaAction';
-import { getCurrentTime, increment, startTimer } from '@/store/counter/action';
-import { selectCounterCount } from '@/store/selectors';
+import CounterNumber from '@/components/CounterNumber';
+import { PlusLessCounter } from '@/components/PlusLessCounter';
+import { startTimer } from '@/store/counter/action';
 import { ExtractCallbackType, promisifiedCallback } from '@/utils/common';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import styles from './styles.module.scss';
 
 export function Counter() {
-  const count = useSelector(selectCounterCount);
   const dispatch = useDispatch();
   const { t } = useTranslation();
   /** Manually promisifying a saga action call and awaiting its response */
@@ -23,36 +23,20 @@ export function Counter() {
     }
   };
 
-  /** Using useAwaitableSagaAction hook to await a saga action */
-  const { dispatchAction: dispatchGetCurrentTime, busy: getTimeBusy } = useAwaitableSagaAction(getCurrentTime);
-  const [currentTime, setCurrentTime] = useState('');
-  const getTimeHandler = async () => {
-    const response = await dispatchGetCurrentTime();
-    if (response.ok) {
-      setCurrentTime(JSON.stringify(response.data ?? ''));
-    }
-  };
-
   return (
-    <div>
-      <div>
-        {/* <button onClick={() => dispatch(decrement())}>-</button> */}
-        <span>{count}</span>
-        <button onClick={() => dispatch(increment(count))}>+</button>
-        {/* <button onClick={() => dispatch(incrementAsync())}>Increment Async</button> */}
-        {t('welcome')}
-      </div>
-      <div>
+    <div className={styles.contain}>
+      <div>{t('welcome')}</div>
+      <div style={{ display: 'flex', gap: '0.5rem' }}>
         <button onClick={timerHandler} disabled={timerBusy}>
-          Start Timer
+          {t('start_timer')}
         </button>
-        <span>Manually Promisified Timer {timerBusy ? 'Running' : 'Stopped'}</span>
+        <span>
+          {t('manually_promisified_timer')} {timerBusy ? 'Running' : 'Stopped'}
+        </span>
       </div>
       <div>
-        <button onClick={getTimeHandler} disabled={getTimeBusy}>
-          Get Current Time
-        </button>
-        <span>{currentTime}</span>
+        <CounterNumber />
+        <PlusLessCounter />
       </div>
     </div>
   );

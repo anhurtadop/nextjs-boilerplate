@@ -1,11 +1,14 @@
 import FetchService, { ApiResponse } from '@/utils/FetchService';
 import { call, delay, put, takeEvery, takeLatest } from 'redux-saga/effects';
-import { getCurrentTime, increment, incrementAsync, startTimer } from './action';
-import { GET_TIME, INCREMENT, START_TIMER } from './action-types';
+import { decrement, decrementAsync, getCurrentTime, increment, incrementAsync, startTimer } from './action';
+import { DECREMENT, GET_TIME, INCREMENT, START_TIMER } from './action-types';
 
 function* incrementAsyncSaga({ payload: count }: ReturnType<typeof increment>) {
-  console.log('saga: incrementAsyncSaga', count);
   yield put(incrementAsync(count)); // Simula lógica asincrónica despachando la acción increment
+}
+
+function* decrementAsyncSaga({ payload: count }: ReturnType<typeof decrement>) {
+  yield put(decrementAsync(count)); // Simula lógica asincrónica despachando la acción increment
 }
 
 function* startTimerAsyncSaga({ payload: { delayMs, callback } }: ReturnType<typeof startTimer>) {
@@ -25,6 +28,10 @@ function* getCurrentTimeSaga({ payload: { callback } }: ReturnType<typeof getCur
 
 export function* watchCounter() {
   yield takeLatest(INCREMENT, incrementAsyncSaga); // Escucha la acción `increment`
+}
+
+export function* watchDecrement() {
+  yield takeLatest(DECREMENT, decrementAsyncSaga);
 }
 
 export function* watchStartTimer() {
