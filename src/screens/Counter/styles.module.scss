@@ -1,11 +1,15 @@
 @import '@/styles/variables';
-.contain {
+
+.container {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  min-height: 100vh;
   align-items: center;
-  padding-top: 2rem;
-  gap: 1rem;
-  background-color: $gray-color;
+  background-color: $black-color;
+  color: $white-color;
+  height: 100vh;
+}
+
+.title {
+  font-size: 4rem;
+  color: $white-color;
 }

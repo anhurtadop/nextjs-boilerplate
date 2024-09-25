@@ -1,6 +1,7 @@
+import { useDispatch, useSelector } from 'react-redux';
+
 import { decrement, increment } from '@/store/counter/action';
 import { selectCounterCount } from '@/store/selectors';
-import { useDispatch, useSelector } from 'react-redux';
 import styles from './styles.module.scss';
 
 export function PlusLessCounter() {
