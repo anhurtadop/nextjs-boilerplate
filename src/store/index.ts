@@ -27,7 +27,6 @@ const reducer = (state: any, action: any): ReturnType<typeof reducers> => {
 
   return reducers(state, action);
 };
-
 const makeStore = ({ isServer }: any) => {
   if (isServer) {
     return configureStore({
