@@ -1,18 +1,21 @@
 'use client';
-import { useAppDispatch } from '@/store/hooks';
 
-import { decrement, increment } from '@/store/features/counter/counterSlice';
+// import { decrement, increment } from '@/store/features/counter/counterSlice';
+import { decrement, increment } from '@/store/counter/action';
+import { selectCounterCount } from '@/store/selectors';
+import { useDispatch, useSelector } from 'react-redux';
 import styles from './styles.module.scss';
 
 export function PlusLessCounter() {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
+  const count = useSelector(selectCounterCount);
 
   return (
     <div className={styles.container}>
-      <button className={styles.button} onClick={() => dispatch(decrement())}>
+      <button className={styles.button} onClick={() => dispatch(decrement(count))}>
         -
       </button>
-      <button className={styles.button} onClick={() => dispatch(increment())}>
+      <button className={styles.button} onClick={() => dispatch(increment(count))}>
         +
       </button>
     </div>
