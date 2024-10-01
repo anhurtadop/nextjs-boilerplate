@@ -1,0 +1,11 @@
+{
+  "index_page": {
+    "index_title": "Inicio | Boilerplate",
+    "welcome": "Bienvenido al boilerplate",
+    "counter_demo": "Demostración de Contador"
+  },
+  "counter_page": {
+    "counter_title": "Contador | Boilerplate",
+    "counter": "Contador"
+  }
+}

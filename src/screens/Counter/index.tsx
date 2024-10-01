@@ -1,14 +1,15 @@
-// import { useTranslation } from 'next-i18next';
-// 'use client';
+import { useTranslations } from 'next-intl';
+
 import CounterNumber from '@/components/CounterNumber';
 import { PlusLessCounter } from '@/components/PlusLessCounter';
-import { useTranslations } from 'next-intl';
 import styles from './styles.module.scss';
+
 export async function Counter() {
-  const t = useTranslations('CounterPage');
+  const t = useTranslations('counter_page');
+
   return (
     <article className={styles.container}>
-      <section className={styles.title}>{t('counter_title')}</section>
+      <h2 className={styles.title}>{t('counter')}</h2>
       <section>
         <CounterNumber />
         <PlusLessCounter />

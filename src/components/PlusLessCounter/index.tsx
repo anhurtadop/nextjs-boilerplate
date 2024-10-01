@@ -1,6 +1,4 @@
 'use client';
-
-// import { decrement, increment } from '@/store/features/counter/counterSlice';
 import { decrement, increment } from '@/store/counter/action';
 import { selectCounterCount } from '@/store/selectors';
 import { useDispatch, useSelector } from 'react-redux';

@@ -1,25 +1,23 @@
-// 'use client';
-
-import { Counter } from '@/screens/Counter';
 import { useTranslations } from 'next-intl';
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
-  const t = await getTranslations({ locale, namespace: 'CounterPage' });
+import { Counter } from '@/screens/Counter';
 
+export async function generateMetadata({ params: { locale } }: { params: { locale: string } }) {
+  const t = await getTranslations({ locale });
   return {
-    title: t('page_counter'),
+    title: t('counter_page.counter_title'),
   };
 }
 
 const CounterPage = ({ params: { locale } }: Readonly<{ params: { locale: string } }>) => {
   unstable_setRequestLocale(locale);
-  const t = useTranslations('CounterPage');
+  const t = useTranslations('counter_page');
 
   return (
     <>
-      <h1 className="text-3xl font-bold underline">{t('manually_promisified_timer')}</h1>
-      <Counter />
+      <h1>{t('counter_title')}</h1>
+      <Counter />;
     </>
   );
 };
