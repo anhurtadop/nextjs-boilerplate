@@ -1,5 +1,5 @@
 {
-  "i18n-ally.localesPaths": ["public/locales"],
+  "i18n-ally.localesPaths": ["messages"],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
