@@ -1,5 +1,4 @@
-import { useTranslations } from 'next-intl';
-import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 
 import { Counter } from '@/screens/Counter';
 
@@ -10,13 +9,9 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   };
 }
 
-const CounterPage = ({ params: { locale } }: Readonly<{ params: { locale: string } }>) => {
-  unstable_setRequestLocale(locale);
-  const t = useTranslations('counter_page');
-
+const CounterPage = () => {
   return (
     <>
-      <h1>{t('counter_title')}</h1>
       <Counter />;
     </>
   );
